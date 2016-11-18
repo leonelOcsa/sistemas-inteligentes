@@ -15,8 +15,11 @@ function [ results ] = naiveBayes()
     good = 0;
     vgood = 0;
     
-    for i = 1:1724
-        if strcmp(C{7}{i}, 'unacc')
+    a = size(C{:,1}, 1);
+    b = size(C,2);
+    
+    for i = 1:a
+        if strcmp(C{b}{i}, 'unacc')
             unacc = unacc + 1;
             %buying
             if strcmp(C{1}{i}, 'vhigh')
