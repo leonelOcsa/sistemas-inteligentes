@@ -1,5 +1,11 @@
 RESULTADOS naiveBayes.m
 
+Para cada atributo se creo una tabla de probabilidades donde cada fila representa una clase en el siguiente orden:
+-unacc
+-acc
+-good
+-vgood
+
 buying = 
 
     'vhigh'     'high'      'med'       'low'   
