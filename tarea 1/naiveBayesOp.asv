@@ -26,15 +26,10 @@ function [c] = naiveBayesOp()
                 end
             end
             if flag == 0
-                %len = length(attributes{j});
-                if(attrLen > 0)
-                    colValue = attrLen+1;
-                    attributes{j}{1, attrLen+1} = C{1, j}{i}; 
-                else
-                    colValue = 1;
-                    attributes{j}{1,1} = C{1, j}{i}; 
-                end
-                      
+                len = length(attributes{j});
+                colValue = len+1;
+                
+                attributes{j}{1, len+1} = C{1, j}{i};   
             end
             
             %comprobamos en que clase estamos
@@ -49,11 +44,11 @@ function [c] = naiveBayesOp()
             end
             
             if classFlag == 0
-                %classLen = length(attributes{b});
-                rowClass = attrLenClass+2;
-                attributes{b}{1, attrLenClass+1} = C{1, b}{i};   
+                classLen = length(attributes{b});
+                rowClass = classLen+2;
+                attributes{b}{1, classLen+1} = C{1, b}{i};   
             end
-            attributes{j}{colValue, 2} = 1;
+            attributes{j}{, colValue, } = 1;
         end
      end
      %c{1}{4,4} = 44
