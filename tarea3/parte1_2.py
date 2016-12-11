@@ -8,6 +8,7 @@ from collections import defaultdict
 import math
 
 #luego de haber hecho el nuevo conteo sobre el archivo train modificado
+#python count_freqs.py gene.out.train > gene.out.counts
 
 def parte1_2(corpus_file, corpus_file2):
     l = corpus_file.readline()
@@ -106,4 +107,5 @@ if __name__ == "__main__":
     
     parte1_2(input1, input2)
     #despues de llamar a la funcion se ontiene el mismo resultado que el pdf
+    #para llamar esta funcion desde consola python parte1_2.py gene.out.counts gene.dev
    
