@@ -7,6 +7,8 @@ import sys
 from collections import defaultdict
 import math
 
+#luego de haber hecho python count freqs.py gene.train > gene.counts
+
 def parte1(corpus_file, corpus_file2):
     l = corpus_file.readline()
     keys = [] #creamos una lista vacia para las claves
@@ -67,7 +69,7 @@ def parte1(corpus_file, corpus_file2):
     #print dictionary['a']
 
     #ahora copiamos el archivo modificando las palabras de menor frecuencia
-    file = open('gene.out.train', 'w')
+    file = open('gene.out.train', 'w') #nombre del archivo de salida modificado
     l = corpus_file2.readline()
     while l: #leemos linea por linea el archivo de conteo
         line = l.strip() #limpiamos espacios tanto por delante como por atras
@@ -99,4 +101,4 @@ if __name__ == "__main__":
         sys.exit(1)
     
     parte1(input1, input2)
-   
+    #llamar usando python parte1.py gene.counts gene.train
