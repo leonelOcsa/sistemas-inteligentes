@@ -138,13 +138,13 @@ def parte3_2(corpus_file1, corpus_file2):
                             
                             eKey = S[k] + "|" + tags_k[v]
                             if not S[k] in dictionary:
-                                word = S[k]
-                                if word.isupper(): #comprobamos si todas las letras son mayusculas
+                                wordS = S[k]
+                                if wordS.isupper(): #comprobamos si todas las letras son mayusculas
                                     eKey = "_ALL_CAPITALS_|" + tags_k[v] 
                                 else:
                                     isLastCapital = 0
                                     isNumeric = 0
-                                    lword = list(word)
+                                    lword = list(wordS)
                                     for p in lword:
                                         if p.isupper():
                                             isLastCapital = isLastCapital + 1
