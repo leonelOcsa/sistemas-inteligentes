@@ -14,6 +14,7 @@ def parte2(corpus_file1, corpus_file2):
     gram3 = {}
     e = {} #probabilidad de emision
     tags = {} #contiene el total de etiquetas con su respectiva cantidad
+    dictionary = {} #contiene el tag con su respectiva emision total
     while l: #leemos linea por linea el archivo de conteo
         line = l.strip()
         arrayLine = line.split() #Hacemos split de la linea y almacenamos las palabras de la linea en un array
@@ -26,6 +27,10 @@ def parte2(corpus_file1, corpus_file2):
             word = arrayLine[3]
             key = word + "|" + tag
             e[key] = count
+
+            if not word in dictionary:
+                dictionary[word] = 0     
+
         else:  
             if gramType == '2-GRAM':
                 count = arrayLine[0]
@@ -90,14 +95,14 @@ def parte2(corpus_file1, corpus_file2):
                 #ahora hacemos el calculo de las q(y_i | y_i-2, y_i-1) = count(y_i-2, y_i-1, y_i)/count(y_i-2, y_i-1)
                 q[key] = float(float(xyz)/float(xy))
     
-    print e
+    #print e
 
     allTags = [] #aqui almacenare todas las etiquetas posibles para el problema, en este caso solo tenemos O y I-GENE
     for i in range(len(tags)):
         tag = tags.keys()[i]
         allTags.insert(i, tag);    
     
-    file = open('gene_test.p2.out', 'w')                
+    file = open('gene_dev.p2.out', 'w')                
     l = corpus_file2.readline()
     i = 0
     S = [] #esta lista ira almacenando una sentencia a la vez a medida que vaya leyendo el archivo se actualizara con la siguiente nueva sentencia y aplicar Viterbi
@@ -125,27 +130,42 @@ def parte2(corpus_file1, corpus_file2):
                             tags_kminus2 = S_minus2
                         else:
                             tags_kminus2 = allTags
+                        wMax = 0.0
+                        wMaxTag = "X"
+                        key = str(k) + ',' + tags_kminus1[u] + ',' + tags_k[v] #clave para pi actual
+                        #print key
+
                         for w in range(len(tags_kminus2)): #para k-2
-                            key = str(k) + ',' + tags_kminus1[u] + ',' + tags_k[v]
-                            previousKey = str(k-1) + ',' + tags_kminus2[w] + ',' + tags_kminus1[u]
+                            previousKey = str(k-1) + ',' + tags_kminus2[w] + ',' + tags_kminus1[u] #clave para pi anterior
+                            #print "w " + previousKey
                             qKey = tags_k[v] + "|" + tags_kminus2[w] + "," + tags_kminus1[u] 
-                            if not qKey in q:
-                                 qKey = "_RARE_" + "|" + tags_kminus2[w] + "," + tags_kminus1[u]
+                            #if not qKey in q:
+                            #     qKey = "_RARE_" + "|" + tags_kminus2[w] + "," + tags_kminus1[u]
                             eKey = S[k] + "|" + tags_k[v]
+                            if not S[k] in dictionary:
+                                eKey = "_RARE_|" + tags_k[v]                                    
+                            tag = 0
                             if not eKey in e:
-                                eKey = "_RARE_" + "|" + tags_k[v]     
+                                tag = 1     
                             #OK
-                            if not key in pi: #si no existe en pi
-                                wMax = tags_kminus2[w]
-                                piMax[key] = wMax
-                                pi[key] = pi[previousKey]*q[qKey]*e[eKey]
-                            else: #si ya existe en pi comparamos con el valor actual y vemos si el nuevo valor es mayor
-                                if pi[key] < pi[previousKey]*q[qKey]*e[eKey]:
-                                    wMax = tags_kminus2[w]      
-                                    pi[key] = pi[previousKey]*q[qKey]*e[eKey]
-                                    piMax[key] = wMax
-                            bp[key] = piMax[key] #y finalmente seteo el valor final del backpointer   
-                                           
+                            #print "e "+ eKey
+                            if tag == 0: 
+                                if wMax < pi[previousKey]*q[qKey]*e[eKey]:
+                                    wMax = pi[previousKey]*q[qKey]*e[eKey]
+                                    wMaxTag = tags_kminus2[w]
+                            
+                            #if not key in pi: #si no existe en pi
+                            #    wMax = tags_kminus2[w]
+                            #    piMax[key] = wMax
+                            #    pi[key] = pi[previousKey]*q[qKey]*e[eKey]
+                            #else: #si ya existe en pi comparamos con el valor actual y vemos si el nuevo valor es mayor
+                            #    if pi[key] < pi[previousKey]*q[qKey]*e[eKey]:
+                            #        wMax = tags_kminus2[w]      
+                            #        pi[key] = pi[previousKey]*q[qKey]*e[eKey]
+                            #        piMax[key] = wMax
+                            #bp[key] = piMax[key] #y finalmente seteo el valor final del backpointer   
+                        pi[key] = wMax
+                        bp[key] = wMaxTag                   
             N = len(S)
             yTags = ['X']*N #secuencia de tags relacionado a la sentencia
             yTagsMax = [0.0]*N
