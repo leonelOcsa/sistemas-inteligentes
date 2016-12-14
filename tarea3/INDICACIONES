@@ -1,0 +1,14 @@
+Para probar cada una de las 3 partes de la tarea hacer lo siguiente
+PARTE 1
+  python parte1_1.py gene.counts gene.train
+  python count_freqs.py gene.out.train > gene.out.counts
+  python parte1_2.py gene.out.counts gene.dev
+  python eval_gene_tagger.py gene.key gene dev.p1.out
+PARTE 2
+  python parte2.py gene.out.counts gene.dev
+  python eval_gene_tagger.py gene.key gene_dev.p2.out 
+PARTE 3
+  python parte3_1.py gene.counts gene.train
+  python count_freqs.py gene.out2.train > gene.out2.counts
+  python parte3_2.py gene.out2.counts gene.dev
+  python eval_gene_tagger.py gene.key gene_dev.p3.out
