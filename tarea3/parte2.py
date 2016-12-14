@@ -116,7 +116,7 @@ def parte2(corpus_file1, corpus_file2):
             i = i+1
         else: #si encuentra salto de linea en archivo signfica STOP y cuando eso ocurre aplicamos Viterbi
             S_minus2 = S_minus1 = ['*']
-            for k in range(len(S)):
+            for k in range(len(S)): #AQUI EMPIEZA VITERBI
                 tags_kminus1 = []
                 kminus1 = k-1
                 if(kminus1 == -1): #si no corresponde al rango de la lista
@@ -199,7 +199,7 @@ def parte2(corpus_file1, corpus_file2):
     #print pi
     file.close()
     
-    #python parte2.py gene.out.counts gene_dev.p1.out
+    #python parte2.py gene.out.counts gene.dev -> para llamar a la funcion y generar gene_dev.p2.out
 if __name__ == "__main__":
 
     if len(sys.argv)!=3: # Expect exactly one argument: the training data file
@@ -213,3 +213,7 @@ if __name__ == "__main__":
         sys.exit(1)
     
     parte2(input1, input2)
+
+    #luego para probar la presicion se hace
+    #python eval_gene_tagger.py gene.key gene_dev.p2.out 
+    #obteniendo el score de F1-score 0.398030

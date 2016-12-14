@@ -1,18 +1,15 @@
 ﻿#! /usr/bin/python
  
-#__author__="Leonel Ocsa S�nchez <leonel.ocsa.sanchez@ucsp.edu.pe>"
+#__author__="Leonel Ocsa Sánchez <leonel.ocsa.sanchez@ucsp.edu.pe>"
 #__date__ ="$Dec, 2016"
 
 import sys
 from collections import defaultdict
 import math
 
-#luego de haber hecho el nuevo conteo sobre el archivo train modificado
-#python count_freqs.py gene.out.train > gene.out.counts
-
-def parte1_2(corpus_file, corpus_file2):
+def parte3_1(corpus_file, corpus_file2):
     l = corpus_file.readline()
-    keys = [] #creamos una lista vacia para las claves tag
+    keys = [] #creamos una lista vacia para las claves
     values = [] #creamos una lista vacia para los values
 
     wKeys = [] #clave de palabras
@@ -39,19 +36,6 @@ def parte1_2(corpus_file, corpus_file2):
             values[valIndex] = values[valIndex] + int(count)
         l = corpus_file.readline() #Leemos la siguiente linea
     
-    #for p in keys: print p
-    #for p in values: print p
-    #for p in wTag: print p
-
-    #acontinuacion creamos el diccionario de palabras con sus respectivo conteo de apariciones por TAG
-    dictionary = {}
-
-    for x in range(len(wKeys)):
-        if not wKeys[x] in dictionary: #si la clave no existe en el diccionario
-            dictionary[wKeys[x]] = {wTag[x]:int(wCount[x])}
-        else: #si la clave ya existe
-            dictionary[wKeys[x]][wTag[x]] = int(wCount[x])
-
     for x in range(len(wKeys)):
         tag = wTag[x]
         valIndex = keys.index(tag)
@@ -59,8 +43,21 @@ def parte1_2(corpus_file, corpus_file2):
         wEmission.insert(x, float(float(wCount[x]) / float(val)))
         #print str(wCount[x]) + " " + wKeys[x] + " " + wTag[x] + " " + str(wEmission[x])
     
+    #dictionary = dict(zip(wKeys, (wTag, wCount)))
+    
+    #acontinuacion creamos el diccionario de palabras con sus respectivo conteo de apariciones por TAG
+    dictionary = {}
+
+    for x in range(len(wKeys)):
+        if not wKeys[x] in dictionary: #si la clave no existe en el diccionario
+            #dictionary[wKeys[x]] = {wTag[x]:int(wCount[x])}
+            dictionary[wKeys[x]] = int(wCount[x])
+        else: #si la clave ya existe
+            #dictionary[wKeys[x]][wTag[x]] = int(wCount[x])
+            dictionary[wKeys[x]] = dictionary[wKeys[x]] + int(wCount[x])    
+    
     #ahora copiamos el archivo modificando las palabras de menor frecuencia
-    file = open('gene_dev.p1.out', 'w')
+    file = open('gene.out2.train', 'w') #nombre del archivo de salida modificado
     l = corpus_file2.readline()
     while l: #leemos linea por linea el archivo de conteo
         line = l.strip() #limpiamos espacios tanto por delante como por atras
@@ -69,29 +66,34 @@ def parte1_2(corpus_file, corpus_file2):
         else:
             arrayline = line.split() #hacemos split de la linea y almacenamos las palabras de la linea en un array
             word = arrayline[0]
-            tags = {}
-            if word in dictionary:
-                tags = dictionary[word] #obtengo el valor de la palabra que en este caso es un diccionario que almacena el count para cada etiqueta relacionada a la palabra (clave)
+            tag = arrayline[1]
+            if dictionary[word] < 5:
+                if word.isupper(): #comprobamos si todo es mayusculas
+                    newline = "_ALL_CAPITALS_ " + arrayline[1]
+                else:
+                    isLastCapital = 0
+                    isNumeric = 0
+                    lword = list(word)
+                    for w in lword:
+                        if w.isupper():
+                            isLastCapital = isLastCapital + 1
+                        else:
+                            if w.isdigit():
+                                isNumeric = isNumeric + 1 
+                    if isNumeric > 0: #comprobamos si es numerico
+                        newline = "_NUMERIC_ " + arrayline[1]
+                    else:
+                        lenw = len(lword)
+                        if isLastCapital == 1 and lword[lenw-1].isupper(): #comprobamos si solo el ultimo caracter es Mayuscula
+                            newline = "_LAST_CAPITAL_ " + arrayline[1] 
+                        else: 
+                            newline = "_RARE_ " + arrayline[1]
+                file.write("%s\n" % newline)
             else:
-                tags = dictionary['_RARE_']
-            tagsLen = len(tags) #saco el length para saber cuantas etiquetas tiene esta palabra
-            max = 0.0
-            winnerTag = 0
-            for i in range(tagsLen):
-                tag = tags.keys()[i] #tag actual a evaluar, de este modo accedo al tag correspondiente en la posicion i
-                #print tag
-                valIndex = keys.index(tag)
-                val = values[valIndex] #respectivo contador total del tag
-                #print val
-                emissionPr = float(float(tags[tag])/float(val)) #probabilidad de emision
-                #print emissionPr
-                if emissionPr > max:
-                    winnerTag = i
-                    max = emissionPr
-            newline = word + " " + tags.keys()[winnerTag]               
-            file.write("%s\n" % newline)
+                file.write("%s\n" % line);
         l = corpus_file2.readline()
-    file.close()
+    file.close() 
+    #Y asi generamos un nuevo archivo train donde se ha reemplazado las palabras de menor frecuencia por _RARE_
 
 if __name__ == "__main__":
 
@@ -105,6 +107,8 @@ if __name__ == "__main__":
         sys.stderr.write("ERROR: Cannot read inputfile %s.\n" % arg)
         sys.exit(1)
     
-    parte1_2(input1, input2)
-    #para llamar esta funcion desde consola python parte1_2.py gene.out.counts gene.dev
-   
+    parte3_1(input1, input2)
+    #llamar usando python parte3_1.py gene.counts gene.train ESTO GENERA EL ARCHIVO gene.out2.train con las nuevas etiquetas _ALL_CAPITALS_, _NUMERICAL_, _LAST_CAPITAL y _RARE_
+    #luego de haber hecho la modificacion de etiquetas hacemos 
+    #python count_freqs.py gene.out2.train > gene.out2.counts
+    #para actualizar el conteo de etiquetas
