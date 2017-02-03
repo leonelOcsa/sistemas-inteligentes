@@ -35,7 +35,7 @@ CNN.clsTest = clsTest #seteamos el valor de las clases de prueba
 #extramos los nombres de las clases
 class_names = cifar10.load_class_names()
 
-#Recargamos la precision y pesos de entrenamientos previos 
+#Recargamos la precision y estados de entrenamientos previos 
 CNN.initRestorePath()
 
 #from tensorflow.examples.tutorials.mnist import input_data
