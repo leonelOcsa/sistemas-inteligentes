@@ -1,0 +1,19 @@
+Se realizo la implementación de un red neuronal convolucional usando Tensor Flow, para ello se uso como datos de CIFAR10,
+donde se trabajo con 5 capas, las 2 primeras capas consisten en capas convolucionales, donde la primera capa recibe como entrada
+1 imagen a la vez con su respectivo numero de canales, en este caso tres, luego durante la convolución se usaron filtros de 
+dimensiones 5x5, siendo un total de 16 filtros. La salida nos da un total de 16 canales imagenes que seran la entrada de la 
+siguiente capa convolucional 2, donde cada uno de estos es operados sobre 36 filtros de 5x5. 
+
+Luego esta salida pasa por una primera capa denominada fullyconnectedlayer1 que trabaja con un total de 128 Neuronas 
+Despues de ello la salida de esta capa sirve de entrada a una segunda capa denominada fullyconnectedlayer2 que trabaja con total de 10 
+clases en este caso siendo dichas clases las siguientes 'airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship' y
+'truck', siendo estas extraidas de la data de CIFAR10. AL ser una cantidad amplia de datos se trabajo procedio a entrenar los datos por
+segmentos o secciones, para este caso se usaron batch de entrenamiento de 64 y para la respectiva clasificacion de las imagenes 256 de batch
+
+Se uso el saver de Tensor Flow para guardar entrenamientos previos y obtener de forma inmediata la precisión, el saver se encarga de 
+guardar las variables de la red neuronal convolucional por ello es importante el uso de session, los datos previos son almacenados 
+en la carpeta restoreBackup. Al guardar los datos en este directorio es posible volver a cargarlos y continuar con la optimización de los
+mismos.
+
+Se realizaron un total de 100 000 iteraciones dando como resultado una precisión final de 79.7% 
+
