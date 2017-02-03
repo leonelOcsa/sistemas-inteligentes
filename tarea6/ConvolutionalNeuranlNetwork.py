@@ -1,4 +1,4 @@
-﻿#anadimos todas las dependencias necesarias
+#anadimos todas las dependencias necesarias
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
@@ -117,6 +117,7 @@ class ConvolutionalNeuranlNetwork:
     
         return layer #retornamos nuestra layer
 
+    #esta funcion nos permite especificar el directorio donde se encuentra el backup de entrenamiento previo
     def initRestorePath(self):
         saveDir = 'checkpoints/'
         if not os.path.exists(saveDir):
@@ -125,13 +126,10 @@ class ConvolutionalNeuranlNetwork:
     
     #para tomar trozos de las imagenes de forma aleatoria definimos la siguiente funcion
     def randomBatch(self):
-        # Number of images in the training-set.
-        num_images = len(self.dataTrain.imagesTrain)
+        num_images = len(self.dataTrain.imagesTrain) #tenemos el numero de imagenes del data trainning
 
-        # Create a random index.
+        #toma una posicion o indice aleatorio
         idx = np.random.choice(num_images, size=self.trainBatchSize, replace=False)
-
-        # Use the random index to select random images and labels.
         x_batch = self.dataTrain.imagesTrain[idx, :, :, :]
         y_batch = self.dataTrain.labelsTrain[idx, :]
 
@@ -151,8 +149,8 @@ class ConvolutionalNeuranlNetwork:
             #almacenamos dichos valores dentro de la sesion de Tensor Flow
             self.session.run(self.optimizer, feed_dict=feed_dict_train)
 
-            #Cada 100 iteraciones imprimimos el progreso
-            if i % 100 == 0:
+            #Cada 10 iteraciones imprimimos el progreso
+            if i % 10 == 0:
                 #Calculamos la precision de los datos de entrenamiento
                 acc = self.session.run(self.accuracy, feed_dict=feed_dict_train)
                 
@@ -221,7 +219,7 @@ class ConvolutionalNeuranlNetwork:
     def initLayersAndDo(self):
         #definimos los parametros iniciales de nuestras red neuronal convolucional
         #debemos tomar en cuenta el numero de capas convolucionales
-        #convolucio 1:
+        #convolucion 1:
         filterSize1 = 5 #Los filtros seran de FilterSize * filterSize
         numFilter1 = 16 #definimos el numero de filtros en la primera capa convolucional
         #convolucion 2: de igual modo para la convolcion numero 2
@@ -296,9 +294,9 @@ class ConvolutionalNeuranlNetwork:
         #tambien es importante definir nuestra sesion de tensorflow que sera usada mas adelante
         #session = tf.Session()
         self.session.run(tf.global_variables_initializer())
-        #para guadar
+        #Inicializamos la variable de guardado que nos provee Tensor Flow
         self.saver = tf.train.Saver()
-        #restaurar
+        #en caso de que exista un entrenamiento previo procedemos a cargar dicha informacion
         self.saver.restore(sess=self.session, save_path=self.savePath)
 
         #self.printTestAccuracy()
