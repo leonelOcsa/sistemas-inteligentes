@@ -12,7 +12,7 @@ segmentos o secciones, para este caso se usaron batch de entrenamiento de 64 y p
 
 Se uso el saver de Tensor Flow para guardar entrenamientos previos y obtener de forma inmediata la precisión, el saver se encarga de 
 guardar las variables de la red neuronal convolucional por ello es importante el uso de session, los datos previos son almacenados 
-en la carpeta restoreBackup. Al guardar los datos en este directorio es posible volver a cargarlos y continuar con la optimización de los
+en la carpeta checkpoints. Al guardar los datos en este directorio es posible volver a cargarlos y continuar con la optimización de los
 mismos.
 
 Se realizaron un total de 100 000 iteraciones dando como resultado una precisión final de 79.7% 
