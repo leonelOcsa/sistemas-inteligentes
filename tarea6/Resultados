@@ -15,5 +15,5 @@ guardar las variables de la red neuronal convolucional por ello es importante el
 en la carpeta checkpoints. Al guardar los datos en este directorio es posible volver a cargarlos y continuar con la optimización de los
 mismos.
 
-Se realizaron un total de 100 000 iteraciones dando como resultado una precisión final de 79.7% 
+Se realizaron un total de 100 000 iteraciones dando como resultado una precisión final de 78.1% 
 
